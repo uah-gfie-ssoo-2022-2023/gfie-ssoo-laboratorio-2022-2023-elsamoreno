@@ -6,10 +6,44 @@
 // Luckily, we have libc! :)
 #include <stdio.h>
 
+
+rtems_id housekeeping_task_id;
+
+rtems_task housekeeping_task (rtems_task_argument ignored) {
+
+	rtems_interval current_time = 0;
+
+	    while (1) {
+
+	        current_time = rtems_clock_get_ticks_since_boot();
+
+	        printf("Current time: %d\n", current_time);
+
+	    }
+
+	}
+
 rtems_task Init(rtems_task_argument ignored)
 {
-    printf("Hello World\n");
+	if (rtems_task_create(rtems_build_name('H','k','T','k'), 10,
+	 RTEMS_MINIMUM_STACK_SIZE,
+	 RTEMS_DEFAULT_MODES,
+	 RTEMS_DEFAULT_ATTRIBUTES,
+	 &housekeeping_task_id) != RTEMS_SUCCESSFUL) {
+	 rtems_shutdown_executive(0);
+	 }
 
-    // End the system execution
-    rtems_shutdown_executive(0);
+	if (rtems_task_start(housekeeping_task_id, housekeeping_task, 0) != RTEMS_SUCCESSFUL) {
+	 rtems_shutdown_executive(0);
+	}
+
+	if (rtems_task_delete(RTEMS_SELF) != RTEMS_SUCCESSFUL) {
+	 rtems_shutdown_executive(0);
+	}
+
+
 }
+
+
+
+
