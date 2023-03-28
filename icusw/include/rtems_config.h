@@ -15,7 +15,7 @@ rtems_task Init(rtems_task_argument arg);
 #define CONFIGURE_MICROSECONDS_PER_TICK (10000)
 
 // Maximum number of tasks
-#define CONFIGURE_MAXIMUM_TASKS (2)
+#define CONFIGURE_MAXIMUM_TASKS (4)
 
 // Ensure that the default initialization table is defined
 #define CONFIGURE_RTEMS_INIT_TASKS_TABLE

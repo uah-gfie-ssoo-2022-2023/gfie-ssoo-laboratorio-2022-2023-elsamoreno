@@ -6,12 +6,20 @@
 // Luckily, we have libc! :)
 #include <stdio.h>
 
+#include "housekeeping.h"
+#include "delay.h"
+
 
 rtems_id housekeeping_task_id;
 
 rtems_task housekeeping_task (rtems_task_argument ignored) {
 
 	rtems_interval current_time = 0;
+	rtems_interval ticks = rtems_clock_get_ticks_per_second();
+	rtems_interval next_activation = rtems_clock_get_ticks_since_boot() + ticks;
+
+	init_housekeeping();
+
 
 	    while (1) {
 
@@ -19,6 +27,12 @@ rtems_task housekeeping_task (rtems_task_argument ignored) {
 
 	        printf("Current time: %d\n", current_time);
 
+	        //rtems_task_wake_after(ticks);
+	        task_delay_until(next_activation);
+
+            do_housekeeping();
+
+            next_activation = next_activation + ticks;
 	    }
 
 	}
@@ -40,6 +54,8 @@ rtems_task Init(rtems_task_argument ignored)
 	if (rtems_task_delete(RTEMS_SELF) != RTEMS_SUCCESSFUL) {
 	 rtems_shutdown_executive(0);
 	}
+
+
 
 
 }
