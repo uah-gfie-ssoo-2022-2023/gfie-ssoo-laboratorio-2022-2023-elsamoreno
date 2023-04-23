@@ -2,13 +2,14 @@
 #define __RTEMS_CONFIG_H__
 
 #include <rtems.h>
+#include "tc_descriptor.h"
 
 rtems_task Init(rtems_task_argument arg);
 
 // We require the Console Driver
 #define CONFIGURE_APPLICATION_NEEDS_CONSOLE_DRIVER
 
-// For the time being, we will not require the clock driver
+// For the time being, we will require the clock driver
 #define CONFIGURE_APPLICATION_NEEDS_CLOCK_DRIVER
 
 // Default value of microseconds per tick
@@ -19,6 +20,19 @@ rtems_task Init(rtems_task_argument arg);
 
 // Ensure that the default initialization table is defined
 #define CONFIGURE_RTEMS_INIT_TASKS_TABLE
+
+//Static memory reservation for semaphores handling
+#define CONFIGURE_MAXIMUM_SEMAPHORES (1)
+
+//Static memory reservation for message queues handling
+#define CONFIGURE_MAXIMUM_MESSAGE_QUEUES (1)
+#define CONFIGURE_MESSAGE_BUFFER_MEMORY ( \
+ CONFIGURE_MESSAGE_BUFFERS_FOR_QUEUE( \
+ 10, \
+ sizeof(tc_descriptor_t) \
+ )\
+ )
+
 
 #define CONFIGURE_INIT
 
