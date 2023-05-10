@@ -4,40 +4,63 @@
 #include <stdlib.h>
 
 #include "housekeeping.h"
+#include "tm_descriptor.h"
+#include "epd_pus_tmtc.h"
+#include "ccsds_pus_format.h"
+#include "tmtc_pool.h"
+#include "tmtc_channel.h"
+
+rtems_id hk_message_queue_id;
 
 #define N_HK_DATA 16
 #define HK_INITIAL_INTERVAL 10
 
 static uint8_t hk_parameters[N_HK_DATA];
 
-static uint32_t interval = HK_INITIAL_INTERVAL;
-static uint32_t interval_control = 0;
+uint32_t interval = HK_INITIAL_INTERVAL;
+uint32_t interval_control = 0;
 
 // This variable will store the random seed
 static unsigned int seed;
 
 void do_housekeeping(void) {
 
-        for(uint8_t i = 0 ; i < N_HK_DATA ; i = i + 1){
-        	hk_parameters[i] = rand_r(&seed)%128;
-        }
+	for(uint8_t i = 0 ; i < N_HK_DATA ; i = i + 1){
+		hk_parameters[i] = rand_r(&seed)%128;
+	}
 
-		interval_control = interval_control + 1;
+	interval_control = interval_control + 1;
 
-		if(interval_control == interval){
+	if(interval_control == interval){
+		/*
 			for(uint8_t j = 0 ; j < N_HK_DATA ; j = j + 1){
 				printf("Parameter %d -value: %d\n", j, hk_parameters[j]);
-			}
+			}*/
+		tm_descriptor_t tm_descriptor;
 
-			interval_control = 0;
+		tm_descriptor.p_tm_bytes = tmtc_pool_alloc();
+
+		if(tm_descriptor.p_tm_bytes != NULL){
+
+			uint16_t tm_count = tm_channel_get_next_tm_count();
+
+			epd_pus_build_tm_3_25_sid0(&tm_descriptor, tm_count,
+					hk_parameters,
+					N_HK_DATA);
+
+
+			tm_channel_send_tm(tm_descriptor);
 		}
+
+		interval_control = 0;
 	}
+}
 
 
 
 void init_housekeeping(void) {
 
-    // Initialize random seed with a default value
-    seed = 0;
+	// Initialize random seed with a default value
+	seed = 0;
 
 }

@@ -51,8 +51,8 @@ rtems_status_code init_tmtc_pool() {
     status = rtems_semaphore_create(
         rtems_build_name('D','C','P','L'),
         1,
-        RTEMS_BINARY_SEMAPHORE,
-        0,
+        RTEMS_BINARY_SEMAPHORE | RTEMS_PRIORITY | RTEMS_PRIORITY_CEILING,
+        5,
         &tmtc_pool_mutex_id
     );
 
@@ -67,15 +67,26 @@ uint8_t * tmtc_pool_alloc() {
 
     // Perform a linear search until finding the first free block. The
     // address of the block will be stored in ret and returned to the task.
+
+    rtems_semaphore_obtain(tmtc_pool_mutex_id, RTEMS_WAIT, RTEMS_NO_TIMEOUT);
+
     for (uint8_t i = 0; i<TMTC_POOL_MAX_NOE; i++)
         {
+
+
         	if(the_tmtc_pool.free_blocks[i]){
-        		rtems_semaphore_obtain(tmtc_pool_mutex_id, RTEMS_WAIT, RTEMS_NO_TIMEOUT);
-        		ret = &the_tmtc_pool.blocks[i];
-        		rtems_semaphore_release(tmtc_pool_mutex_id);
+
+        		ret = the_tmtc_pool.blocks[i];
+        		the_tmtc_pool.free_blocks[i] = 0;
+
+
+
         		break;
         	}
+
+
         }
+        rtems_semaphore_release(tmtc_pool_mutex_id);
 
     return ret;
 
@@ -96,7 +107,10 @@ void tmtc_pool_free(uint8_t * p_block) {
 
         // Mark the block as free
     	rtems_semaphore_obtain(tmtc_pool_mutex_id, RTEMS_WAIT, RTEMS_NO_TIMEOUT);
-        the_tmtc_pool.free_blocks[index] = 1;
+        the_tmtc_pool.free_blocks[index] = 1; //Necesito los semáforos por si acaso, porque no sé si esta operación es atómica
+                                              //debido a que estoy escribiendo un byte y el tamaño de palabra es de 32 bits.
+                                              //Puede que no sea atómica, esté aplicando una máscara para realizar la escritura, etc.
+
         rtems_semaphore_release(tmtc_pool_mutex_id);
 
     }

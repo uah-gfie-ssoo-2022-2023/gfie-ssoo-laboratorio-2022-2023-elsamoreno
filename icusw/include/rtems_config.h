@@ -25,10 +25,10 @@ rtems_task Init(rtems_task_argument arg);
 #define CONFIGURE_MAXIMUM_SEMAPHORES (1)
 
 //Static memory reservation for message queues handling
-#define CONFIGURE_MAXIMUM_MESSAGE_QUEUES (1)
+#define CONFIGURE_MAXIMUM_MESSAGE_QUEUES (2)
 #define CONFIGURE_MESSAGE_BUFFER_MEMORY ( \
  CONFIGURE_MESSAGE_BUFFERS_FOR_QUEUE( \
- 10, \
+ 15, \
  sizeof(tc_descriptor_t) \
  )\
  )
