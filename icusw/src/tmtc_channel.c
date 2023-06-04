@@ -1,10 +1,18 @@
 #include <rtems.h>
+#include <rtems/libio.h>
+#include <bsp/irq.h>
+#include <fcntl.h>
+
+
 
 #include "tmtc_channel.h"
 #include "tm_descriptor.h"
 #include "serialize.h"
 #include "riscv_uart.h"
 #include "tmtc_pool.h"
+#include "tc_descriptor.h"
+#include "driver.h"
+
 
 rtems_id tc_message_queue_id;
 
@@ -14,20 +22,22 @@ rtems_id tc_message_queue_id;
 static rtems_id tm_channel_mutex_id;
 
 
-rtems_status_code init_tm_channel() {
+static int uart_fd;
+
+rtems_status_code init_tmtc_channel() {
 
     rtems_status_code status;
 
-    riscv_uart_enable_TX();
+    uart_fd = open("uart0", O_RDWR);
+
+    if (uart_fd < 0) {
+        return RTEMS_IO_ERROR;
+    }
 
     status = rtems_semaphore_create(
-            rtems_build_name('T','M','C','H'),
-            1,
+            rtems_build_name('T', 'M', 'C', 'H'), 1,
             RTEMS_BINARY_SEMAPHORE | RTEMS_PRIORITY | RTEMS_PRIORITY_CEILING,
-            8,
-            &tm_channel_mutex_id
-        );
-
+            8, &tm_channel_mutex_id);
 
     return status;
 
@@ -65,36 +75,53 @@ rtems_status_code tm_channel_send_tm(tm_descriptor_t descriptor) {
 
     serialize_uint16(descriptor.tm_num_bytes, &frame_header[4]);
 
-    rtems_semaphore_obtain(tm_channel_mutex_id, RTEMS_NO_WAIT, RTEMS_NO_TIMEOUT);
+    rtems_semaphore_obtain(tm_channel_mutex_id, RTEMS_WAIT,
+            RTEMS_NO_TIMEOUT);
 
-    for (uint8_t i = 0; i < 6; i = i + 1) {
-
-        if (riscv_putchar(frame_header[i]) != 0) {
-            return RTEMS_IO_ERROR;
-        }
-
-    }
-
-
-   // Send the TM Packet
-   for(uint8_t i = 0; i < descriptor.tm_num_bytes ; i++){
-
-	   if (riscv_putchar(*(descriptor.p_tm_bytes + i)) != 0) {
-	               return RTEMS_IO_ERROR;
-	           }
-   }
-
-    // Wait until the last byte has been transmitted
-    while(!riscv_uart_tx_fifo_is_empty());
-
+    write(uart_fd, frame_header, 6);
+    write(uart_fd, descriptor.p_tm_bytes, descriptor.tm_num_bytes);
 
     rtems_semaphore_release(tm_channel_mutex_id);
 
-    //Free the TM descriptor to the pool
     tmtc_pool_free(descriptor.p_tm_bytes);
 
-
-
     return RTEMS_SUCCESSFUL;
+
+}
+
+
+rtems_id tc_rx_task_id;
+
+rtems_task tc_rx_task (rtems_task_argument ignored) {
+
+    // Send message
+    tc_descriptor_t tc_descriptor;
+
+    while (1) {
+
+        uint8_t frame_header[6];
+
+        tc_descriptor.tc_num_bytes = 0;
+
+        // TODO: Allocate a new block from the pool to store the telecommand
+        tc_descriptor.p_tc_bytes = tmtc_pool_alloc();
+
+        // TODO: Read the frame header (6 bytes)
+        read(uart_fd, frame_header, 6);
+
+        // TODO: Deserialize the size field
+        tc_descriptor.tc_num_bytes = deserialize_uint16(&frame_header[4]);
+
+        // TODO: Read the telecommand and store it into the descriptor
+        read(uart_fd, tc_descriptor.p_tc_bytes, tc_descriptor.tc_num_bytes);
+
+        // TODO: Deliver the telecommand through the message queue
+        rtems_message_queue_send(tc_message_queue_id, &tc_descriptor,
+        	            sizeof(tc_descriptor_t));
+
+
+    }
+
+    rtems_shutdown_executive(1);
 
 }

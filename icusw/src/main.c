@@ -137,7 +137,7 @@ rtems_task Init(rtems_task_argument ignored)
 
 
 	init_tmtc_pool();
-	init_tm_channel();
+	init_tmtc_channel();
 
 	rtems_message_queue_create(rtems_build_name('T','C','M','Q'), 10,
 			sizeof(tc_descriptor_t),RTEMS_FIFO,&tc_message_queue_id);
@@ -149,11 +149,11 @@ rtems_task Init(rtems_task_argument ignored)
 			RTEMS_MINIMUM_STACK_SIZE,
 			RTEMS_DEFAULT_MODES,
 			RTEMS_DEFAULT_ATTRIBUTES,
-			&emu_tc_rx_task_id) != RTEMS_SUCCESSFUL) {
+			&tc_rx_task_id) != RTEMS_SUCCESSFUL) {
 		rtems_shutdown_executive(0);
 	}
 
-	if (rtems_task_start(emu_tc_rx_task_id, emu_tc_rx_task, 0) != RTEMS_SUCCESSFUL) {
+	if (rtems_task_start(tc_rx_task_id, tc_rx_task, 0) != RTEMS_SUCCESSFUL) {
 		rtems_shutdown_executive(0);
 	}
 
