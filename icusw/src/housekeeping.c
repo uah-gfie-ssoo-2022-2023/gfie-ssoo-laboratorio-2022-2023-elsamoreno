@@ -9,6 +9,7 @@
 #include "ccsds_pus_format.h"
 #include "tmtc_pool.h"
 #include "tmtc_channel.h"
+#include "riscv_gpio.h"
 
 rtems_id hk_message_queue_id;
 
@@ -25,9 +26,18 @@ static unsigned int seed;
 
 void do_housekeeping(void) {
 
-	for(uint8_t i = 0 ; i < N_HK_DATA ; i = i + 1){
-		hk_parameters[i] = rand_r(&seed)%128;
+	// Now the first three parameters are the state of SW[0..2]
+	for (uint32_t i = 0; i < 3; i = i + 1) {
+	    hk_parameters[i] = read_switch(i);
 	}
+
+	// And the rest are generted randomly as usual
+	for (uint32_t i = 3; i < N_HK_DATA; i = i + 1) {
+	    hk_parameters[i] = rand_r(&seed) % 128;
+	}
+
+	// We change the state of the LED on each activation
+	write_led(0, interval_control % 2);
 
 	interval_control = interval_control + 1;
 

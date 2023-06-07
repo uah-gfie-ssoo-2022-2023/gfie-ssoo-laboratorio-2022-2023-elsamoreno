@@ -77,6 +77,22 @@ void riscv_uart_disable_RX()
 	return;
 }
 //***************************
+
+void riscv_uart_enable_RI()
+{
+	// Set Ri bit in Control register
+	pUART_REGS->Ctrl |= RISCV_UART_RI;
+	return;
+}
+//***************************
+
+void riscv_uart_disable_RI()
+{
+    // Clear RE bit in Control register
+	pUART_REGS->Ctrl &= ~(RISCV_UART_RI);
+	return;
+}
+//***************************
 int32_t riscv_getchar(){
 	int32_t uart_data;
 	if(pUART_REGS->Status & RISCV_UART_DR){

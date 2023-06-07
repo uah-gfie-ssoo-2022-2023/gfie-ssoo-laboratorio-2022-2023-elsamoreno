@@ -16,7 +16,7 @@ extern rtems_id tc_message_queue_id;
  * \return RTEMS_SUCCESS if the channel was initialized correctly or an error
  *         otherwise.
  */
-rtems_status_code init_tm_channel();
+rtems_status_code init_tmtc_channel();
 
 
 /**
@@ -36,5 +36,19 @@ uint16_t tm_channel_get_next_tm_count();
  *         RTEMS_IO_ERROR otherwise.
  */
 rtems_status_code tm_channel_send_tm(tm_descriptor_t descriptor);
+
+
+
+/**
+ * \brief Identifier of the TC reception task.
+ */
+extern rtems_id tc_rx_task_id;
+
+/**
+ * \brief Entry point of the TC reception task.
+ */
+rtems_task tc_rx_task (rtems_task_argument ignored);
+
+
 
 #endif /* INCLUDE_TMTC_CHANNEL_H_ */
