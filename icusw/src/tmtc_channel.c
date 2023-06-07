@@ -1,6 +1,7 @@
 #include <rtems.h>
 #include <rtems/libio.h>
 #include <bsp/irq.h>
+#include <unistd.h>
 #include <fcntl.h>
 
 

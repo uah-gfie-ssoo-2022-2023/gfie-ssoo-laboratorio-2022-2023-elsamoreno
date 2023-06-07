@@ -17,6 +17,7 @@
 #include "epd_pus_tmtc.h"
 #include "tm_descriptor.h"
 #include "ccsds_pus_format.h"
+#include "riscv_gpio.h"
 
 
 rtems_id housekeeping_task_id;
@@ -122,6 +123,11 @@ rtems_task housekeeping_task (rtems_task_argument ignored) {
 
 rtems_task Init(rtems_task_argument ignored)
 {
+	init_gpio();
+	init_tmtc_pool();
+	init_tmtc_channel();
+
+
 	if (rtems_task_create(rtems_build_name('H','k','T','k'), 10,
 			RTEMS_MINIMUM_STACK_SIZE,
 			RTEMS_DEFAULT_MODES,
@@ -136,8 +142,7 @@ rtems_task Init(rtems_task_argument ignored)
 
 
 
-	init_tmtc_pool();
-	init_tmtc_channel();
+
 
 	rtems_message_queue_create(rtems_build_name('T','C','M','Q'), 10,
 			sizeof(tc_descriptor_t),RTEMS_FIFO,&tc_message_queue_id);

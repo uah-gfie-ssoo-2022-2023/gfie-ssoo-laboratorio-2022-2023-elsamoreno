@@ -262,8 +262,8 @@ void epd_pus_build_tm_3_25_sid0(tm_descriptor_t * p_tm_descriptor,
 	tm_packet_header.packet_length = 20;
 
 	df_header.version = ccsds_pus_tm_build_df_header_version(0x1);
-	df_header.type = 17;
-	df_header.subtype = 2;
+	df_header.type = 3;
+	df_header.subtype = 25;
 	df_header.destinationID = EPD_DESTINATION_ID;
 
 	ccsds_pus_tm_set_fields(p_tm_descriptor->p_tm_bytes,
