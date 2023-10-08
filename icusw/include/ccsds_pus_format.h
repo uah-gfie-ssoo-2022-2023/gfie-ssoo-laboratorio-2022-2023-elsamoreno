@@ -9,38 +9,30 @@
 /**
  * \brief Structure type to the Packet Header field of a TM/TC packet.
  */
-struct ccsds_pus_tmtc_packet_header {
-
-	uint16_t packet_id;
-	uint16_t packet_seq_ctrl;
-	uint16_t packet_length;
-
-};
-
+typedef struct {
+    uint16_t packet_id;
+    uint16_t packet_seq_ctrl;
+    uint16_t packet_length;
+} ccsds_pus_tmtc_packet_header_t;
 /**
  * \brief Structure type to store the Data Field Header field of a TC packet.
  */
-struct ccsds_pus_tc_df_header {
-
-	uint8_t flag_ver_ack;
-	uint8_t type;
-	uint8_t subtype;
-	uint8_t sourceID;
-
-
-};
+typedef struct {
+    uint8_t flag_ver_ack;
+    uint8_t type;
+    uint8_t subtype;
+    uint8_t sourceID;
+} ccsds_pus_tc_df_header_t;
 
 /**
  * \brief Structure type to store the Data Field Header field of a TM packet.
  */
-struct ccsds_pus_tm_df_header {
-
-	uint8_t version;
-	uint8_t type;
-	uint8_t subtype;
-	uint8_t destinationID;
-
-};
+typedef struct {
+    uint8_t version;
+    uint8_t type;
+    uint8_t subtype;
+    uint8_t destinationID;
+} ccsds_pus_tm_df_header_t;
 
 
 
@@ -93,10 +85,10 @@ struct ccsds_pus_tm_df_header {
  * \param p_tc_packet_err_ctrl pointer to the variable that shall store the
  *                             Packet Error Control
  */
-void ccsds_pus_tc_get_fields(uint8_t tc_bytes[],
-		struct ccsds_pus_tmtc_packet_header * p_tc_packet_header,
-		struct ccsds_pus_tc_df_header * p_tc_df_header,
-		uint16_t * p_tc_packet_err_ctrl);
+void ccsds_pus_tc_get_fields(uint8_t tc_bytes[256],
+                             ccsds_pus_tmtc_packet_header_t * p_tc_packet_header,
+                             ccsds_pus_tc_df_header_t * p_tc_df_header,
+                             uint16_t * p_tc_packet_err_ctrl);
 
 /**
  * \brief Builds the Packet ID of a telmetry.
@@ -149,9 +141,9 @@ void ccsds_pus_tc_get_fields(uint8_t tc_bytes[],
  * \param p_tm_df_header the const pointer to the struct that defines the
  *                           TM Data Field Header
  */
-void ccsds_pus_tm_set_fields(uint8_t tm_bytes[],
-                        const struct ccsds_pus_tmtc_packet_header * p_tm_packet_header,
-                        const struct ccsds_pus_tm_df_header * p_tm_df_header);
+void ccsds_pus_tm_set_fields(uint8_t tm_bytes[256],
+                             ccsds_pus_tmtc_packet_header_t * p_tm_packet_header,
+                             ccsds_pus_tm_df_header_t * p_tm_df_header);
 
 
 #endif /* INCLUDE_CCSDS_PUS_FORMAT_H_ */

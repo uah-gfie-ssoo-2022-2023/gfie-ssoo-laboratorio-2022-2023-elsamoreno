@@ -22,8 +22,8 @@ uint8_t accept_tc(tc_descriptor_t * tc_descriptor) {
 
 	uint8_t ret = 1;
 
-	struct ccsds_pus_tmtc_packet_header tc_packet_header;
-	struct ccsds_pus_tc_df_header tc_df_header;
+	ccsds_pus_tmtc_packet_header_t tc_packet_header;
+	ccsds_pus_tc_df_header_t tc_df_header;
 	uint16_t tc_packet_err_ctrl;
 
 	ccsds_pus_tc_get_fields(tc_descriptor->p_tc_bytes,
@@ -192,8 +192,8 @@ rtems_task manager_task (rtems_task_argument ignored) {
 
 			// Yep, we accepted the TC!
 
-			struct ccsds_pus_tmtc_packet_header tc_packet_header;
-			struct ccsds_pus_tc_df_header tc_df_header;
+			ccsds_pus_tmtc_packet_header_t tc_packet_header;
+			ccsds_pus_tc_df_header_t tc_df_header;
 			uint16_t tc_packet_err_ctrl;
 
 			ccsds_pus_tc_get_fields(tc_descriptor.p_tc_bytes,

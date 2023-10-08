@@ -11,8 +11,8 @@ void epd_pus_build_tm_1_1(tm_descriptor_t *p_tm_descriptor,
 		uint16_t tc_packet_id,
 		uint16_t tc_packet_seq_ctrl) {
 
-	struct ccsds_pus_tmtc_packet_header tm_packet_header;
-	struct ccsds_pus_tm_df_header df_header;
+		ccsds_pus_tmtc_packet_header_t tm_packet_header;
+		ccsds_pus_tm_df_header_t df_header;
 
 	tm_packet_header.packet_id = ccsds_pus_tm_build_packet_id(EPD_APID);
 
@@ -56,8 +56,8 @@ void epd_pus_build_tm_1_2_crc_error (tm_descriptor_t *p_tm_descriptor,
 ){
 
 
-	struct ccsds_pus_tmtc_packet_header tm_packet_header;
-	struct ccsds_pus_tm_df_header df_header;
+		ccsds_pus_tmtc_packet_header_t tm_packet_header;
+		ccsds_pus_tm_df_header_t df_header;
 
 	tm_packet_header.packet_id = ccsds_pus_tm_build_packet_id(EPD_APID);
 
@@ -90,8 +90,8 @@ void epd_pus_build_tm_1_2_illegal_type(tm_descriptor_t * p_tm_descriptor,
 		uint16_t tc_packet_id,
 		uint16_t tc_packet_seq_ctrl){
 
-	struct ccsds_pus_tmtc_packet_header tm_packet_header;
-	struct ccsds_pus_tm_df_header df_header;
+		ccsds_pus_tmtc_packet_header_t tm_packet_header;
+		ccsds_pus_tm_df_header_t df_header;
 
 	tm_packet_header.packet_id = ccsds_pus_tm_build_packet_id(EPD_APID);
 
@@ -121,8 +121,8 @@ void epd_pus_build_tm_1_2_illegal_subtype(tm_descriptor_t * p_tm_descriptor,
 		uint16_t tc_packet_id,
 		uint16_t tc_packet_seq_ctrl){
 
-	struct ccsds_pus_tmtc_packet_header tm_packet_header;
-	struct ccsds_pus_tm_df_header df_header;
+	ccsds_pus_tmtc_packet_header_t tm_packet_header;
+	ccsds_pus_tm_df_header_t df_header;
 
 	tm_packet_header.packet_id = ccsds_pus_tm_build_packet_id(EPD_APID);
 
@@ -152,8 +152,8 @@ void epd_pus_build_tm_1_7(tm_descriptor_t * p_tm_descriptor,
 		uint16_t tc_packet_id,
 		uint16_t tc_packet_seq_ctrl){
 
-	struct ccsds_pus_tmtc_packet_header tm_packet_header;
-	struct ccsds_pus_tm_df_header df_header;
+	ccsds_pus_tmtc_packet_header_t tm_packet_header;
+	ccsds_pus_tm_df_header_t df_header;
 
 	tm_packet_header.packet_id = ccsds_pus_tm_build_packet_id(EPD_APID);
 
@@ -187,8 +187,8 @@ void epd_pus_build_tm_1_8(tm_descriptor_t * p_tm_descriptor,
 		uint16_t tc_packet_id,
 		uint16_t tc_packet_seq_ctrl){
 
-	struct ccsds_pus_tmtc_packet_header tm_packet_header;
-	struct ccsds_pus_tm_df_header df_header;
+	ccsds_pus_tmtc_packet_header_t tm_packet_header;
+	ccsds_pus_tm_df_header_t df_header;
 
 	tm_packet_header.packet_id = ccsds_pus_tm_build_packet_id(EPD_APID);
 
@@ -220,8 +220,8 @@ void epd_pus_build_tm_1_8(tm_descriptor_t * p_tm_descriptor,
 void epd_pus_build_tm_17_2(tm_descriptor_t * p_tm_descriptor,
 		uint16_t tm_seq_counter){
 
-	struct ccsds_pus_tmtc_packet_header tm_packet_header;
-	struct ccsds_pus_tm_df_header df_header;
+	ccsds_pus_tmtc_packet_header_t tm_packet_header;
+	ccsds_pus_tm_df_header_t df_header;
 
 	tm_packet_header.packet_id = ccsds_pus_tm_build_packet_id(EPD_APID);
 
@@ -251,8 +251,8 @@ void epd_pus_build_tm_17_2(tm_descriptor_t * p_tm_descriptor,
 void epd_pus_build_tm_3_25_sid0(tm_descriptor_t * p_tm_descriptor,
         uint16_t tm_seq_counter, uint8_t * hk_parameter, uint32_t num_params){
 
-	struct ccsds_pus_tmtc_packet_header tm_packet_header;
-	struct ccsds_pus_tm_df_header df_header;
+	ccsds_pus_tmtc_packet_header_t tm_packet_header;
+	ccsds_pus_tm_df_header_t df_header;
 
 	tm_packet_header.packet_id = ccsds_pus_tm_build_packet_id(EPD_APID);
 

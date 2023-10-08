@@ -105,4 +105,3 @@ int32_t riscv_getchar(){
 
 	return uart_data;
 }
-

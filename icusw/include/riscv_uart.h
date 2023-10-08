@@ -15,9 +15,6 @@ void riscv_uart_disable_TX();
 void riscv_uart_enable_RX();
 void riscv_uart_disable_RX();
 
-void riscv_uart_enable_RI();
-void riscv_uart_disable_RI();
-
 
 // STATUS REGISTER MASKS
 #define RISCV_UART_DR   0x00000001  // UART DATA READY

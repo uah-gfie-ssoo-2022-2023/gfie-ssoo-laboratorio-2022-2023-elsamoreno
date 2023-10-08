@@ -46,8 +46,8 @@ rtems_task housekeeping_task (rtems_task_argument ignored) {
 			// If we are here, it means that we have received a TC
 
 			// Decode the telecommand
-			struct ccsds_pus_tmtc_packet_header tc_packet_header;
-			struct ccsds_pus_tc_df_header tc_df_header;
+			ccsds_pus_tmtc_packet_header_t tc_packet_header;
+			ccsds_pus_tc_df_header_t tc_df_header;
 			uint16_t tc_packet_err_ctrl;
 
 			ccsds_pus_tc_get_fields(tc_descriptor.p_tc_bytes,
@@ -183,7 +183,3 @@ rtems_task Init(rtems_task_argument ignored)
 
 
 }
-
-
-
-

@@ -5,7 +5,7 @@
 #include "uart_rx_queue.h"
 #include "riscv_uart.h"
 
-#define UART_RX_IRQ_NUMBER 0x1
+#define UART_RX_IRQ_NUMBER 0x3
 
 static rtems_id uart_rx_sem;
 

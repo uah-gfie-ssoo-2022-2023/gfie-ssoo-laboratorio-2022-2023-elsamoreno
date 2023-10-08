@@ -9,7 +9,8 @@
 rtems_task Init(rtems_task_argument arg);
 
 // We require the Console Driver
-#define CONFIGURE_APPLICATION_DOES_NOT_NEED_CONSOLE_DRIVER
+//#define CONFIGURE_APPLICATION_DOES_NOT_NEED_CONSOLE_DRIVER
+#define CONFIGURE_APPLICATION_NEEDS_CONSOLE_DRIVER
 
 // For the time being, we will require the clock driver
 #define CONFIGURE_APPLICATION_NEEDS_CLOCK_DRIVER
@@ -53,3 +54,4 @@ rtems_task Init(rtems_task_argument arg);
 #include <rtems/confdefs.h>
 
 #endif /* __RTEMS_CONFIG_H__ */
+
